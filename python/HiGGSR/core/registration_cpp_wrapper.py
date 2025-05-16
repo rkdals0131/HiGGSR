@@ -126,10 +126,24 @@ def call_hierarchical_adaptive_search_cpp(
     gmk_np_cpp = np.ascontiguousarray(global_map_keypoints_np, dtype=np.float32)
     lsk_np_cpp = np.ascontiguousarray(live_scan_keypoints_np, dtype=np.float32)
 
+    # Ensure keypoints are N x 3 (add z=0 if they are N x 2)
+    if gmk_np_cpp.shape[1] == 2:
+        gmk_np_cpp = np.hstack((gmk_np_cpp, np.zeros((gmk_np_cpp.shape[0], 1), dtype=np.float32)))
+    if lsk_np_cpp.shape[1] == 2:
+        lsk_np_cpp = np.hstack((lsk_np_cpp, np.zeros((lsk_np_cpp.shape[0], 1), dtype=np.float32)))
+    
+    if gmk_np_cpp.ndim != 2 or gmk_np_cpp.shape[1] != 3:
+        raise ValueError(f"C++ wrapper: global_map_keypoints_np must be N x 3 or N x 2. Got shape {global_map_keypoints_np.shape}")
+    if lsk_np_cpp.ndim != 2 or lsk_np_cpp.shape[1] != 3:
+        raise ValueError(f"C++ wrapper: live_scan_keypoints_np must be N x 3 or N x 2. Got shape {live_scan_keypoints_np.shape}")
+
     # initial_map_x_edges and initial_map_y_edges should be list[float]
     # pybind11 automatically converts Python list to std::vector<float>.
     initial_x_edges_list = list(initial_map_x_edges)
     initial_y_edges_list = list(initial_map_y_edges)
+
+    # Handle num_processes if None
+    num_processes_cpp = num_processes if num_processes is not None else -1 # Default to auto (-1) if None
 
     # 4. Call the C++ method
     print(f"  Invoking C++ hierarchicalAdaptiveSearch from wrapper...")
@@ -143,7 +157,7 @@ def call_hierarchical_adaptive_search_cpp(
         num_candidates_to_select_per_level,
         min_candidate_separation_factor,
         base_grid_cell_size,
-        num_processes
+        num_processes_cpp # Use the corrected num_processes
     )
     end_time_cpp_call = time.time()
     cpp_call_duration = end_time_cpp_call - start_time_cpp_call

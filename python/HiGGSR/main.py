@@ -34,7 +34,7 @@ def main():
     parser.add_argument('--keypoint-threshold', type=float, default=0.1, help='키포인트 밀도 임계값 (기본값: 0.1)')
     parser.add_argument('--processes', type=int, default=None, help='병렬 처리에 사용할 프로세스 수 (기본값: 시스템 CPU 수)')
     parser.add_argument('--visualize', action='store_true', help='결과 시각화 활성화')
-    parser.add_argument('--use-cpp', action=argparse.BooleanOptionalAction, default=False, help='C++ 확장 사용 여부 (기본값: 사용)')
+    parser.add_argument('--use-cpp', action=argparse.BooleanOptionalAction, default=True, help='C++ 확장 사용 여부 (기본값: 사용)')
     
     args = parser.parse_args()
     
@@ -174,9 +174,14 @@ def main():
     #=========================================================================
     print("\n4. 계층적 적응형 전역 정합 수행 중...")
     start_time = time.time()
+
+    # C++ wrapper가 기대하는 initial_map_x_edges, initial_map_y_edges 형식으로 변환
+    initial_map_x_edges_for_cpp = [x_edges_global[0], x_edges_global[-1]]
+    initial_map_y_edges_for_cpp = [y_edges_global[0], y_edges_global[-1]]
+
     final_transform_dict, final_score, all_levels_visualization_data, total_hierarchical_time, total_calc_iterations = core.hierarchical_adaptive_search(
         global_keypoints, scan_keypoints,
-        x_edges_global, y_edges_global, 
+        initial_map_x_edges_for_cpp, initial_map_y_edges_for_cpp, # 수정된 인자 전달 
         LEVEL_CONFIGS,
         NUM_CANDIDATES_PER_LEVEL, 
         MIN_CANDIDATE_SEPARATION_FACTOR,

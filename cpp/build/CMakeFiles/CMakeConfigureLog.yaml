@@ -1320,3 +1320,45 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/FindMPI.cmake:1283 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/FindMPI.cmake:1327 (_MPI_try_staged_settings)"
+      - "/usr/local/share/cmake-3.31/Modules/FindMPI.cmake:1650 (_MPI_check_lang_works)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/vtk-9.1/VTK-vtk-module-find-packages.cmake:397 (find_package)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/vtk-9.1/vtk-config.cmake:150 (include)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/pcl/PCLConfig.cmake:270 (find_package)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/pcl/PCLConfig.cmake:319 (find_VTK)"
+      - "/usr/lib/x86_64-linux-gnu/cmake/pcl/PCLConfig.cmake:540 (find_external_library)"
+      - "CMakeLists.txt:20 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/home/user1/ROS2_Workspace/ICP_ws/src/HiGGSR/cpp/build/CMakeFiles/CMakeScratch/TryCompile-h6hKdG"
+      binary: "/home/user1/ROS2_Workspace/ICP_ws/src/HiGGSR/cpp/build/CMakeFiles/CMakeScratch/TryCompile-h6hKdG"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/usr/lib/x86_64-linux-gnu/cmake/vtk-9.1/patches/99;/usr/lib/x86_64-linux-gnu/cmake/vtk-9.1;/usr/lib/x86_64-linux-gnu/cmake/pcl/Modules"
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/home/user1/ROS2_Workspace/ICP_ws/src/HiGGSR/cpp/build/CMakeFiles/CMakeScratch/TryCompile-h6hKdG'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_af7a1/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_af7a1.dir/build.make CMakeFiles/cmTC_af7a1.dir/build
+        gmake[1]: Entering directory '/home/user1/ROS2_Workspace/ICP_ws/src/HiGGSR/cpp/build/CMakeFiles/CMakeScratch/TryCompile-h6hKdG'
+        Building C object CMakeFiles/cmTC_af7a1.dir/test_mpi.c.o
+        /usr/bin/cc  -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi  -o CMakeFiles/cmTC_af7a1.dir/test_mpi.c.o -c /home/user1/ROS2_Workspace/ICP_ws/src/HiGGSR/cpp/build/CMakeFiles/CMakeScratch/TryCompile-h6hKdG/test_mpi.c
+        Linking C executable cmTC_af7a1
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_af7a1.dir/link.txt --verbose=1
+        /usr/bin/cc -L/usr/lib/x86_64-linux-gnu/openmpi/lib CMakeFiles/cmTC_af7a1.dir/test_mpi.c.o -o cmTC_af7a1  /usr/lib/x86_64-linux-gnu/libmpi.so
+        gmake[1]: Leaving directory '/home/user1/ROS2_Workspace/ICP_ws/src/HiGGSR/cpp/build/CMakeFiles/CMakeScratch/TryCompile-h6hKdG'
+        
+      exitCode: 0
+...
