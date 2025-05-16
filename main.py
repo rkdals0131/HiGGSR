@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # 데이터 파일 경로를 HiGGSR/Data/ 하위로 변경
     BASE_DATA_PATH = os.path.join(os.path.dirname(__file__), "Data")
     GLOBAL_MAP_FILEPATH = os.path.join(BASE_DATA_PATH, "around_singong - Cloud.ply")
-    LIVE_SCAN_FILEPATH = os.path.join(BASE_DATA_PATH, "around_singong_ply/001255.ply")
+    LIVE_SCAN_FILEPATH = os.path.join(BASE_DATA_PATH, "around_singong_ply/001355.ply")
 
     #=========================================================================
     # 알고리즘 파라미터 설정
