@@ -1,0 +1,3 @@
+sensor_msgs/PointCloud2 point_cloud
+string frame_id
+builtin_interfaces/Time stamp 

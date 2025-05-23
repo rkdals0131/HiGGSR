@@ -1,0 +1,66 @@
+# HiGGSR 파일 처리 노드 설정
+# PLY 파일을 읽어서 처리하는 배치 작업용 노드
+
+file_processor_node:
+  ros__parameters:
+    # === 파일 입출력 설정 ===
+    input_file_path: ""                             # 입력 PLY 파일 경로 (런타임에 지정)
+    output_directory: "./higgsr_results"            # 결과 저장 디렉토리
+    save_results: true                              # 결과 파일 저장 여부
+    
+    # === 알고리즘 파라미터 ===
+    grid_size: 0.2                                  # 그리드 셀 크기 (미터)
+    min_points_for_density_calc: 3                  # 밀도 계산을 위한 셀당 최소 포인트 수
+    density_metric: 'std'                           # 밀도 메트릭 ('std', 'var', 'range')
+    keypoint_density_threshold: 0.1                 # 키포인트 추출을 위한 밀도 임계값
+    
+    # === 멀티프로세싱 설정 ===
+    num_processes: 0                                # 병렬 처리 프로세스 수 (0=자동 설정)
+    
+    # === 계층적 탐색 설정 ===
+    level_configs: >
+      [
+        { 
+          "grid_division": [6, 6],                  
+          "search_area_type": "full_map",           
+          "theta_range_deg": [0, 359],             
+          "theta_search_steps": 48,                
+          "correspondence_distance_threshold_factor": 7.0,
+          "tx_ty_search_steps_per_cell": [10, 10] 
+        },
+        { 
+          "grid_division": [7, 7],                  
+          "search_area_type": "relative_to_map",    
+          "area_ratio_or_size": 0.4,               
+          "theta_range_deg_relative": [0, 359],    
+          "theta_search_steps": 48,                
+          "correspondence_distance_threshold_factor": 5.0,
+          "tx_ty_search_steps_per_cell": [10, 10] 
+        },
+        { 
+          "grid_division": [4, 4],                  
+          "search_area_type": "absolute_size",      
+          "area_ratio_or_size": [40.0, 40.0],      
+          "theta_range_deg_relative": [0, 359],    
+          "theta_search_steps": 48,                
+          "correspondence_distance_threshold_factor": 2.5,
+          "tx_ty_search_steps_per_cell": [10, 10] 
+        }
+      ]  # 계층적 검색 단계별 설정 (JSON 배열)
+    
+    num_candidates_per_level: 3                     # 각 레벨에서 유지할 후보 개수
+    min_candidate_separation_factor: 1.5            # 후보간 최소 분리 거리 계수
+    
+    # === 프레임 설정 ===
+    global_frame_id: 'map'                   # 글로벌 맵 프레임 ID
+    scan_frame_id: 'map'                      # 스캔 프레임 ID
+    
+    # === 시각화 설정 ===
+    enable_pillar_maps_visualization: false         # Pillar Map 시각화 활성화
+    enable_2d_keypoints_visualization: true         # 2D 키포인트 시각화 활성화
+    enable_super_grid_heatmap_visualization: true   # 슈퍼 그리드 히트맵 시각화 활성화
+    enable_3d_result_visualization: true            # 3D 결과 시각화 활성화
+    
+    # === 로깅 설정 ===
+    log_level: "INFO"                               # 로그 레벨 (DEBUG, INFO, WARN, ERROR)
+    save_debug_info: false                          # 디버그 정보 저장 여부 

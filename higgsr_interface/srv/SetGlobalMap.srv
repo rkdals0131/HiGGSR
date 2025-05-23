@@ -1,0 +1,4 @@
+higgsr_interface/PointCloudInfo global_map_info
+---
+bool success
+string message 

@@ -1,0 +1,18 @@
+# 요청: 전역 맵 파일과 라이브 스캔 파일 경로
+string global_map_filepath
+string live_scan_filepath
+
+# 파라미터 (옵션, 빈 문자열이면 기본값 사용)
+string algorithm_config_json
+
+---
+
+# 응답: 처리 결과
+bool success
+geometry_msgs/TransformStamped estimated_transform
+float32 score
+string message
+
+# 처리 통계
+float32 processing_time_seconds
+int32 total_calc_iterations 

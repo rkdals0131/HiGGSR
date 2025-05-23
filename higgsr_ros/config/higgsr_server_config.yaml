@@ -1,0 +1,57 @@
+higgsr_server_node:
+  ros__parameters:
+    # === 글로벌 맵 설정 ===
+    global_map_file_path: "src/HiGGSR/Data/around_singong - Cloud.ply"  # 글로벌 맵 PLY 파일 경로
+    
+    # === 글로벌 맵 처리 파라미터 ===
+    global_grid_size: 0.2                          # 글로벌 맵 그리드 셀 크기 (미터)
+    global_min_points_for_density_calc: 3          # 밀도 계산을 위한 셀당 최소 포인트 수
+    global_density_metric: "std"                   # 밀도 메트릭 ('std', 'var', 'count')
+    global_keypoint_density_threshold: 0.1         # 키포인트 추출을 위한 밀도 임계값
+    global_frame_id: "map"                         # 글로벌 맵 프레임 ID
+    
+    # === 라이브 스캔 처리 파라미터 ===
+    live_grid_size: 0.2                            # 라이브 스캔 그리드 셀 크기 (미터)
+    live_min_points_for_density_calc: 3            # 라이브 스캔 밀도 계산용 최소 포인트 수
+    live_density_metric: "std"                     # 라이브 스캔 밀도 메트릭
+    live_keypoint_density_threshold: 0.1           # 라이브 스캔 키포인트 추출 임계값
+    
+    # === 정합 알고리즘 파라미터 ===
+    level_configs: '[
+      {
+        "grid_division": [6, 6],                   
+        "search_area_type": "full_map",            
+        "theta_range_deg": [0, 359],               
+        "theta_search_steps": 48,                  
+        "correspondence_distance_threshold_factor": 7.0,
+        "tx_ty_search_steps_per_cell": [10, 10]   
+      },
+      {
+        "grid_division": [7, 7],                   
+        "search_area_type": "relative_to_map",     
+        "area_ratio_or_size": 0.4,                
+        "theta_range_deg_relative": [0, 359],     
+        "theta_search_steps": 48,                  
+        "correspondence_distance_threshold_factor": 5.0,
+        "tx_ty_search_steps_per_cell": [10, 10]   
+      },
+      {
+        "grid_division": [4, 4],                   
+        "search_area_type": "absolute_size",       
+        "area_ratio_or_size": [40.0, 40.0],       
+        "theta_range_deg_relative": [0, 359],     
+        "theta_search_steps": 48,                  
+        "correspondence_distance_threshold_factor": 2.5,
+        "tx_ty_search_steps_per_cell": [10, 10]   
+      }
+    ]'  # 계층적 검색 설정 (JSON 형식)
+    
+    num_candidates_per_level: 3                    # 각 레벨에서 유지할 후보 개수
+    min_candidate_separation_factor: 1.5           # 후보간 최소 분리 거리 계수
+    num_processes: 0                               # 병렬 처리 프로세스 수 (0이면 자동)
+    
+    # === 시각화 설정 ===
+    enable_matplotlib_visualization: true          # matplotlib 시각화 활성화
+    enable_2d_keypoints_visualization: true        # 2D 키포인트 정합 결과 시각화
+    enable_3d_result_visualization: true           # 3D 포인트클라우드 정합 결과 시각화
+    enable_super_grid_heatmap_visualization: true  # 계층적 탐색 히트맵 시각화 

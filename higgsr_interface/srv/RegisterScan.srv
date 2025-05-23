@@ -1,0 +1,6 @@
+higgsr_interface/PointCloudInfo live_scan_info
+---
+bool success
+geometry_msgs/TransformStamped estimated_transform
+float32 score
+string message 
