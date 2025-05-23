@@ -1,8 +1,0 @@
-setuptools
-numpy
-open3d
-scipy
-numba
-
-[test]
-pytest

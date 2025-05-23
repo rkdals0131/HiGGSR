@@ -23,15 +23,14 @@ from higgsr_ros.utils import ros_utils
 
 class HiGGSRServerNode(Node):
     """
-    HiGGSR 알고리즘을 실행하는 서버 노드 (file_processor_node.py 로직 기반)
+    HiGGSR 알고리즘을 실행하는 서버 노드
     - 시작 시 Data 디렉토리에서 글로벌 맵 자동 로드
     - 스캔 정합 서비스 제공
-    - file_processor_node.py와 동일한 완벽한 알고리즘 파이프라인 사용
     """
     
     def __init__(self):
         super().__init__('higgsr_server_node')
-        self.get_logger().info("HiGGSR 서버 노드 시작 (file_processor 로직 기반)")
+        self.get_logger().info("HiGGSR 서버 노드 시작")
 
         # 내부 상태 변수
         self.global_map_points_3d = None
@@ -42,11 +41,11 @@ class HiGGSRServerNode(Node):
         self.map_set = False
         self.processing_lock = Lock()
 
-        # 파라미터 선언 (file_processor_node와 동일)
+        # 파라미터 선언
         self._declare_algorithm_parameters()
         self._declare_visualization_parameters()
 
-        # RViz2 시각화를 위한 퍼블리셔들 설정 (file_processor_node와 동일)
+        # RViz2 시각화를 위한 퍼블리셔들 설정
         self._setup_rviz_publishers()
 
         # 변환 결과 퍼블리시를 위한 퍼블리셔 생성
@@ -69,7 +68,7 @@ class HiGGSRServerNode(Node):
             'register_scan',
             self.handle_register_scan)
 
-        self.get_logger().info("HiGGSR 서버 노드 초기화 완료 (file_processor 로직 적용)")
+        self.get_logger().info("HiGGSR 서버 노드 초기화 완료")
 
     def _declare_algorithm_parameters(self):
         """알고리즘 관련 파라미터들을 선언 (file_processor_node와 동일)"""
@@ -128,7 +127,7 @@ class HiGGSRServerNode(Node):
         self.declare_parameter('enable_3d_result_visualization', True)
 
     def _setup_rviz_publishers(self):
-        """RViz2 시각화를 위한 퍼블리셔들을 설정 (file_processor_node와 동일)"""
+        """RViz2 시각화를 위한 퍼블리셔들을 설정"""
         
         # 퍼블리셔 직접 생성
         self.global_map_publisher = self.create_publisher(PointCloud2, 'higgsr_global_map', 10)
@@ -137,7 +136,7 @@ class HiGGSRServerNode(Node):
         self.scan_keypoints_publisher = self.create_publisher(MarkerArray, 'higgsr_scan_keypoints', 10)
         self.pose_publisher = self.create_publisher(PoseStamped, 'higgsr_pose', 10)
         
-        self.get_logger().info("RViz2 시각화 퍼블리셔 설정 완료")
+        self.get_logger().info("RViz2 퍼블리셔 설정 완료")
 
     def _parse_level_configs(self, level_configs_str):
         """레벨 설정 JSON 문자열을 파싱 (file_processor_node와 동일)"""
@@ -192,18 +191,17 @@ class HiGGSRServerNode(Node):
         return config
 
     def _load_global_map_from_data_directory(self):
-        """Data 디렉토리에서 글로벌 맵을 자동으로 로드 (기존 로직 유지)"""
+        """Data 디렉토리에서 글로벌 맵을 자동으로 로드"""
         try:
             # 글로벌 맵 파일 경로 가져오기
             map_file_path = self.get_parameter('global_map_file_path').get_parameter_value().string_value
             
             # 절대 경로로 변환
             if not os.path.isabs(map_file_path):
-                # 워크스페이스 루트에서 상대 경로로 계산
                 workspace_root = '/home/user1/ROS2_Workspace/higgsros_ws'
                 map_file_path = os.path.join(workspace_root, map_file_path)
             
-            self.get_logger().info(f"글로벌 맵 로드 시도: {map_file_path}")
+            self.get_logger().info(f"글로벌 맵 로드: {map_file_path}")
             
             if not os.path.exists(map_file_path):
                 self.get_logger().error(f"글로벌 맵 파일을 찾을 수 없습니다: {map_file_path}")
@@ -213,19 +211,19 @@ class HiGGSRServerNode(Node):
             self.global_map_points_3d = core_utils.load_point_cloud_from_file(map_file_path)
             
             if self.global_map_points_3d is None or self.global_map_points_3d.shape[0] == 0:
-                self.get_logger().error("글로벌 맵 로드 실패 또는 빈 포인트 클라우드")
+                self.get_logger().error("글로벌 맵 로드 실패")
                 return
                 
-            self.get_logger().info(f"글로벌 맵 로드 완료: {self.global_map_points_3d.shape[0]} 점")
+            self.get_logger().info(f"글로벌 맵 로드 완료: {self.global_map_points_3d.shape[0]} 포인트")
             
-            # 글로벌 맵 처리 (file_processor_node와 동일한 방식)
+            # 글로벌 맵 처리
             self._process_global_map_file_processor_style()
             
         except Exception as e:
             self.get_logger().error(f"글로벌 맵 자동 로드 중 오류: {e}")
     
     def _process_global_map_file_processor_style(self):
-        """글로벌 맵 처리 (file_processor_node와 동일한 방식)"""
+        """글로벌 맵 처리"""
         try:
             config = self._load_config_from_parameters()
             
@@ -238,7 +236,7 @@ class HiGGSRServerNode(Node):
             if self.density_map_global.size == 0:
                 raise ValueError("글로벌 Pillar Map 생성 실패")
 
-            self.get_logger().info(f"글로벌 Pillar Map 생성 완료: {self.density_map_global.shape}")
+            self.get_logger().info(f"글로벌 Pillar Map 생성: {self.density_map_global.shape}")
 
             # 2. 키포인트 추출
             self.global_keypoints = core_feature_extraction.extract_high_density_keypoints(
@@ -246,13 +244,13 @@ class HiGGSRServerNode(Node):
                 config['keypoint_density_threshold']
             )
 
-            self.get_logger().info(f"글로벌 키포인트 추출 완료: {self.global_keypoints.shape[0]} 개")
+            self.get_logger().info(f"글로벌 키포인트 추출: {self.global_keypoints.shape[0]} 개")
 
             if self.global_keypoints.shape[0] == 0:
                 self.get_logger().warn("추출된 글로벌 키포인트가 없습니다")
 
             self.map_set = True
-            self.get_logger().info("글로벌 맵 처리 및 설정 완료 (file_processor 방식)")
+            self.get_logger().info("글로벌 맵 처리 완료")
 
         except Exception as e:
             self.get_logger().error(f"글로벌 맵 처리 중 오류: {e}")
@@ -289,8 +287,8 @@ class HiGGSRServerNode(Node):
         return response
 
     def handle_register_scan(self, request, response):
-        """스캔 등록 서비스 핸들러 (캡처된 스캔 데이터 보호 방식)"""
-        self.get_logger().info("스캔 등록 요청 수신 (캡처된 스캔 보호 방식)")
+        """스캔 등록 서비스 핸들러"""
+        self.get_logger().info("스캔 등록 요청 수신")
 
         if not self.map_set:
             response.success = False
@@ -304,31 +302,17 @@ class HiGGSRServerNode(Node):
                 # 설정 로드
                 config = self._load_config_from_parameters()
                 
-                # 캡처된 라이브 스캔 처리 (클라이언트에서 보호된 데이터)
+                # 캡처된 라이브 스캔 처리
                 cloud_msg = request.live_scan_info.point_cloud
                 
-                # 캡처된 스캔 정보 로깅
-                captured_scan_info = {
-                    'frame_id': cloud_msg.header.frame_id,
-                    'timestamp': f"{cloud_msg.header.stamp.sec}.{cloud_msg.header.stamp.nanosec}",
-                    'width': cloud_msg.width,
-                    'height': cloud_msg.height,
-                    'point_count': cloud_msg.width * cloud_msg.height
-                }
-                self.get_logger().info(f"📦 캡처된 스캔 수신:")
-                self.get_logger().info(f"   - 프레임: {captured_scan_info['frame_id']}")
-                self.get_logger().info(f"   - 타임스탬프: {captured_scan_info['timestamp']}")
-                self.get_logger().info(f"   - 포인트 수: {captured_scan_info['point_count']}")
-                
-                # 캡처된 스캔을 numpy로 변환 (이 데이터는 처리 전체에서 보호됨)
+                # 캡처된 스캔을 numpy로 변환
                 captured_scan_points_3d = ros_utils.convert_ros_point_cloud2_to_numpy(
                     cloud_msg, field_names=('x', 'y', 'z'))
 
                 if captured_scan_points_3d is None or captured_scan_points_3d.shape[0] == 0:
                     raise ValueError("캡처된 스캔이 비어 있거나 변환 실패")
 
-                self.get_logger().info(f"✅ 캡처된 스캔 변환 완료: {captured_scan_points_3d.shape[0]} 점")
-                self.get_logger().info(f"   - 이 데이터는 처리 완료까지 보호됩니다")
+                self.get_logger().info(f"캡처된 스캔 처리: {captured_scan_points_3d.shape[0]} 포인트")
 
                 # 캡처된 스캔 Pillar Map 생성
                 density_map_scan, x_edges_scan, y_edges_scan = core_utils.create_2d_height_variance_map(
@@ -338,21 +322,19 @@ class HiGGSRServerNode(Node):
                 
                 if density_map_scan.size == 0:
                     raise ValueError("캡처된 스캔 Pillar Map 생성 실패")
-                    
-                self.get_logger().info(f"캡처된 스캔 Pillar Map 생성 완료: {density_map_scan.shape}")
 
                 # 캡처된 스캔 키포인트 추출
                 scan_keypoints = core_feature_extraction.extract_high_density_keypoints(
                     density_map_scan, x_edges_scan, y_edges_scan, config['keypoint_density_threshold']
                 )
                 
-                self.get_logger().info(f"캡처된 스캔 키포인트: {scan_keypoints.shape[0]} 개")
+                self.get_logger().info(f"키포인트 추출: {scan_keypoints.shape[0]} 개")
 
                 if scan_keypoints.shape[0] == 0:
-                    self.get_logger().warn("캡처된 스캔 키포인트가 없습니다")
+                    self.get_logger().warn("추출된 키포인트가 없습니다")
 
                 # 계층적 적응형 전역 정합 수행
-                self.get_logger().info("계층적 적응형 전역 정합 수행 중 (캡처된 데이터 사용)...")
+                self.get_logger().info("계층적 적응형 전역 정합 수행 중...")
                 
                 initial_map_x_edges_for_search = [self.x_edges_global[0], self.x_edges_global[-1]]
                 initial_map_y_edges_for_search = [self.y_edges_global[0], self.y_edges_global[-1]]
@@ -377,19 +359,16 @@ class HiGGSRServerNode(Node):
                 
                 total_time = time.time() - start_time
                 
-                self.get_logger().info("--- 정합 결과 (캡처된 스캔 보호 방식) ---")
-                self.get_logger().info(f"  추정된 변환: tx={est_tx:.3f}, ty={est_ty:.3f}, theta={est_theta_deg:.2f} deg")
-                self.get_logger().info(f"  최고 점수: {final_score}")
-                self.get_logger().info(f"  정합 소요 시간: {total_hierarchical_time:.2f} 초")
-                self.get_logger().info(f"  총 계산된 변환 후보 수: {total_calc_iterations}")
-                self.get_logger().info(f"  전체 소요 시간: {total_time:.2f} 초")
+                self.get_logger().info("--- 정합 결과 ---")
+                self.get_logger().info(f"변환: tx={est_tx:.3f}, ty={est_ty:.3f}, theta={est_theta_deg:.2f}°")
+                self.get_logger().info(f"점수: {final_score}")
+                self.get_logger().info(f"처리 시간: {total_hierarchical_time:.2f}초, 총 시간: {total_time:.2f}초")
+                self.get_logger().info(f"계산된 변환 후보 수: {total_calc_iterations}")
                 
                 # 변환 행렬 생성
                 final_transform_matrix_4x4 = core_utils.create_transform_matrix_4x4(est_tx, est_ty, est_theta_deg)
-                self.get_logger().info("최종 정합 결과 (4x4 동차 변환 행렬):")
-                self.get_logger().info(f"\n{final_transform_matrix_4x4}")
                 
-                # 시각화 (캡처된 스캔 데이터 사용)
+                # 시각화
                 self._perform_visualizations_file_processor_style(config, self.global_keypoints, scan_keypoints, 
                                            est_tx, est_ty, est_theta_deg, final_score,
                                            self.x_edges_global, self.y_edges_global,
@@ -397,7 +376,7 @@ class HiGGSRServerNode(Node):
                                            self.global_map_points_3d, captured_scan_points_3d,
                                            final_transform_matrix_4x4)
                 
-                # RViz2 시각화 퍼블리시 (캡처된 스캔 데이터 사용)
+                # RViz2 시각화 퍼블리시
                 self._publish_to_rviz2_file_processor_style(self.global_map_points_3d, captured_scan_points_3d, 
                                      self.global_keypoints, scan_keypoints,
                                      {'tx': est_tx, 'ty': est_ty, 'theta_deg': est_theta_deg, 
@@ -409,7 +388,7 @@ class HiGGSRServerNode(Node):
                 # 응답 생성
                 response.success = True
                 response.score = float(final_score)
-                response.message = "스캔 등록 성공 (캡처된 스캔 보호 방식)"
+                response.message = "스캔 등록 성공"
                 
                 # TransformStamped 설정
                 transform_stamped = self.create_transform_stamped(
@@ -417,7 +396,7 @@ class HiGGSRServerNode(Node):
                 response.estimated_transform = transform_stamped
 
             except Exception as e:
-                self.get_logger().error(f"스캔 등록 중 오류 (캡처된 스캔 보호 방식): {e}")
+                self.get_logger().error(f"스캔 등록 중 오류: {e}")
                 response.success = False
                 response.message = f"스캔 등록 실패: {str(e)}"
 
@@ -496,36 +475,31 @@ class HiGGSRServerNode(Node):
                 self.get_logger().warn(f"시각화 라이브러리를 가져올 수 없습니다: {e}")
 
     def _publish_to_rviz2_file_processor_style(self, global_points_3d, captured_scan_points_3d, global_keypoints_2d, scan_keypoints_2d, transform_result):
-        """캡처된 스캔 보호 방식의 RViz2 퍼블리시"""
+        """RViz2 시각화 퍼블리시"""
         try:
-            self.get_logger().info("🎯 RViz2 시각화 데이터 퍼블리시 시작 (캡처된 스캔 보호 방식)...")
+            self.get_logger().info("RViz2 시각화 데이터 퍼블리시")
             
             frame_id = 'map'
             
             # 1. 글로벌 맵 포인트클라우드 퍼블리시
             if global_points_3d is not None and global_points_3d.shape[0] > 0:
                 self._publish_point_cloud_fp_style(global_points_3d, self.global_map_publisher, frame_id, (255, 255, 255))
-                self.get_logger().info(f"   ✅ 글로벌 맵 퍼블리시: {global_points_3d.shape[0]} 포인트 (흰색)")
             
             # 2. 캡처된 스캔 포인트클라우드 퍼블리시 (변환 적용)
             if captured_scan_points_3d is not None and captured_scan_points_3d.shape[0] > 0:
                 transformed_captured_scan = self._apply_transform_to_points_fp_style(captured_scan_points_3d, transform_result)
                 self._publish_point_cloud_fp_style(transformed_captured_scan, self.live_scan_publisher, frame_id, (255, 0, 0))
-                self.get_logger().info(f"   ✅ 변환된 캡처 스캔 퍼블리시: {transformed_captured_scan.shape[0]} 포인트 (빨간색)")
-                self.get_logger().info(f"      - 이것은 엔터키로 캡처된 보호된 스캔 데이터입니다")
             
             # 3. 글로벌 키포인트 퍼블리시
             if global_keypoints_2d is not None and global_keypoints_2d.shape[0] > 0:
                 self._publish_keypoints_as_markers_fp_style(global_keypoints_2d, self.global_keypoints_publisher, 
                                                  "global_keypoints", frame_id, (0.0, 0.0, 1.0, 1.0), 0.8)
-                self.get_logger().info(f"   ✅ 글로벌 키포인트 퍼블리시: {global_keypoints_2d.shape[0]} 개 (파란색)")
             
             # 4. 캡처된 스캔 키포인트 퍼블리시 (변환 적용)
             if scan_keypoints_2d is not None and scan_keypoints_2d.shape[0] > 0:
                 transformed_keypoints = self._apply_transform_to_keypoints_fp_style(scan_keypoints_2d, transform_result)
                 self._publish_keypoints_as_markers_fp_style(transformed_keypoints, self.scan_keypoints_publisher, 
                                                  "scan_keypoints", frame_id, (0.0, 1.0, 0.0, 1.0), 0.6)
-                self.get_logger().info(f"   ✅ 변환된 캡처 스캔 키포인트 퍼블리시: {transformed_keypoints.shape[0]} 개 (녹색)")
             
             # 5. 현재 포즈 퍼블리시
             pose_msg = PoseStamped()
@@ -542,9 +516,7 @@ class HiGGSRServerNode(Node):
             pose_msg.pose.orientation.w = q[3]
             
             self.pose_publisher.publish(pose_msg)
-            self.get_logger().info("   ✅ 현재 포즈 퍼블리시 완료")
-            
-            self.get_logger().info("🎯 RViz2 시각화 완료! 캡처된 보호 데이터를 일관되게 사용했습니다.")
+            self.get_logger().info("RViz2 시각화 완료")
             
         except Exception as e:
             self.get_logger().error(f"RViz2 퍼블리시 중 오류: {e}")
@@ -734,7 +706,7 @@ def main(args=None):
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
-        node.get_logger().info('키보드 인터럽트 수신, 종료 중...')
+        node.get_logger().info('종료 중...')
     finally:
         node.destroy_node()
         rclpy.shutdown()
