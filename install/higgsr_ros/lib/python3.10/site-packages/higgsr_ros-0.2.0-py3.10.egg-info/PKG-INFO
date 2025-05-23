@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: higgsr_ros
+Version: 0.2.0
+Summary: 개별 노드 기반 HiGGSR 로컬라이제이션 시스템 - 필요한 기능만 선택적으로 실행 가능
+Maintainer: user1
+Maintainer-email: kikiws70@gmail.com
+License: Apache License 2.0
+Requires-Dist: setuptools
+Requires-Dist: numpy
+Requires-Dist: open3d
+Requires-Dist: scipy
+Requires-Dist: numba
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Dynamic: license
+Dynamic: maintainer
+Dynamic: maintainer-email
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: summary

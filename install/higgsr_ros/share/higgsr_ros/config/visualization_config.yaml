@@ -1,0 +1,56 @@
+higgsr_visualization_node:
+  ros__parameters:
+    # === 프레임 설정 ===
+    map_frame_id: "map"                             # 글로벌 맵 프레임 ID (모든 것을 이 프레임으로 통일)
+    base_frame_id: "map"                           # 로봇 베이스 프레임 ID (map과 동일하게 설정)
+    
+    # === 디버깅 설정 ===
+    debug_use_identity_transform: false             # 아이덴티티 변환 사용 (디버깅용)
+    debug_log_transforms: true                      # 변환 로그 출력 (디버깅용)
+    
+    # === 시각화 설정 ===
+    visualization_scale: 1.0                       # 마커 크기 스케일
+    path_max_length: 100                           # 경로 최대 길이
+    marker_lifetime: 10.0                          # 마커 표시 시간 (초)
+    
+    # === 라이다 토픽 설정 ===
+    lidar_topic: "/ouster/points"                  # 라이다 포인트클라우드 토픽
+    
+    # === 글로벌 맵 설정 ===
+    global_map_file_path: "src/HiGGSR/Data/around_singong - Cloud.ply"  # 글로벌 맵 PLY 파일 경로
+    
+    # === 글로벌 맵 처리 파라미터 ===
+    global_grid_size: 0.2                          # 글로벌 맵 그리드 셀 크기 (미터)
+    global_min_points_for_density_calc: 3          # 밀도 계산을 위한 셀당 최소 포인트 수
+    global_density_metric: "std"                   # 밀도 메트릭 ('std', 'var', 'count')
+    global_keypoint_density_threshold: 0.1         # 키포인트 추출을 위한 밀도 임계값
+    
+    # === 시각화 스타일 설정 ===
+    visualization_scale: 1.0                        # 마커 크기 배율
+    path_max_length: 100                            # 경로 최대 길이 (포즈 개수)
+    marker_lifetime: 10.0                           # 마커 표시 수명 (초)
+    
+    # === 색상 설정 ===
+    pose_marker_color: [1.0, 0.0, 0.0, 1.0]       # 포즈 마커 색상 (RGBA: 빨간색)
+    trajectory_color: [0.0, 0.0, 1.0, 1.0]        # 궤적 라인 색상 (RGBA: 파란색)
+    global_keypoints_color: [0.0, 1.0, 0.0, 1.0]  # 글로벌 키포인트 색상 (RGBA: 초록색)
+    scan_keypoints_color: [1.0, 1.0, 0.0, 1.0]    # 스캔 키포인트 색상 (RGBA: 노란색)
+    
+    # === 포인트클라우드 시각화 설정 ===
+    global_map_topic: "higgsr_global_map"           # 글로벌 맵 포인트클라우드 토픽
+    live_scan_topic: "higgsr_live_scan"             # 라이브 스캔 포인트클라우드 토픽
+    point_size: 0.05                                # 포인트클라우드 포인트 크기
+    
+    # === 키포인트 마커 설정 ===
+    keypoint_marker_scale: 0.5                      # 키포인트 마커 크기
+    global_keypoints_topic: "higgsr_global_keypoints"  # 글로벌 키포인트 마커 토픽
+    scan_keypoints_topic: "higgsr_scan_keypoints"   # 스캔 키포인트 마커 토픽
+    
+    # === 경로 및 궤적 설정 ===
+    path_topic: "higgsr_path"                       # 로봇 경로 토픽
+    trajectory_topic: "higgsr_trajectory"           # 궤적 라인 마커 토픽
+    pose_marker_topic: "higgsr_pose_marker"         # 포즈 마커 토픽
+    
+    # === 업데이트 주기 설정 ===
+    visualization_update_rate: 10.0                 # 시각화 업데이트 주기 (Hz)
+    statistics_update_rate: 1.0                     # 통계 정보 업데이트 주기 (Hz) 

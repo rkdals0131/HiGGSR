@@ -1,0 +1,102 @@
+[0.681s] Invoking command in '/home/user1/ROS2_Workspace/higgsros_ws/src/higgsr_ros': PS1=(.venv) %m%# PYTHONPATH=/home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages:${PYTHONPATH} VIRTUAL_ENV_PROMPT=(.venv) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/higgsr_ros build --build-base /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build install --record /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/install.log --single-version-externally-managed install_data
+[0.919s] running egg_info
+[0.933s] creating ../build/higgsr_ros/higgsr_ros.egg-info
+[0.933s] writing ../build/higgsr_ros/higgsr_ros.egg-info/PKG-INFO
+[0.934s] writing dependency_links to ../build/higgsr_ros/higgsr_ros.egg-info/dependency_links.txt
+[0.934s] writing entry points to ../build/higgsr_ros/higgsr_ros.egg-info/entry_points.txt
+[0.934s] writing requirements to ../build/higgsr_ros/higgsr_ros.egg-info/requires.txt
+[0.934s] writing top-level names to ../build/higgsr_ros/higgsr_ros.egg-info/top_level.txt
+[0.935s] writing manifest file '../build/higgsr_ros/higgsr_ros.egg-info/SOURCES.txt'
+[0.968s] reading manifest file '../build/higgsr_ros/higgsr_ros.egg-info/SOURCES.txt'
+[0.969s] writing manifest file '../build/higgsr_ros/higgsr_ros.egg-info/SOURCES.txt'
+[0.969s] running build
+[0.969s] running build_py
+[0.969s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros
+[0.969s] copying higgsr_ros/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros
+[0.969s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core
+[0.970s] copying higgsr_ros/core/utils.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core
+[0.970s] copying higgsr_ros/core/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core
+[0.970s] copying higgsr_ros/core/registration.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core
+[0.970s] copying higgsr_ros/core/feature_extraction.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core
+[0.970s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/utils
+[0.970s] copying higgsr_ros/utils/ros_utils.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/utils
+[0.970s] copying higgsr_ros/utils/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/utils
+[0.971s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes
+[0.971s] copying higgsr_ros/nodes/lidar_client_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes
+[0.971s] copying higgsr_ros/nodes/file_processor_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes
+[0.971s] copying higgsr_ros/nodes/file_processor_client_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes
+[0.971s] copying higgsr_ros/nodes/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes
+[0.971s] copying higgsr_ros/nodes/higgsr_server_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes
+[0.971s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/visualization
+[0.971s] copying higgsr_ros/visualization/visualization.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/visualization
+[0.972s] copying higgsr_ros/visualization/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/visualization
+[0.972s] copying higgsr_ros/visualization/visualization_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/visualization
+[0.972s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/scripts
+[0.972s] copying higgsr_ros/scripts/test_rviz_visualization.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/scripts
+[0.972s] copying higgsr_ros/scripts/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/scripts
+[0.972s] copying higgsr_ros/scripts/test_higgsr_system.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/scripts
+[0.973s] running install
+[0.977s] running install_lib
+[0.994s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros
+[0.994s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core/utils.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core/registration.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/core/feature_extraction.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core
+[0.995s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes/lidar_client_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes/file_processor_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes/file_processor_client_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes
+[0.995s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/nodes/higgsr_server_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes
+[0.996s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/utils
+[0.996s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/utils/ros_utils.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/utils
+[0.996s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/utils/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/utils
+[0.996s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros
+[0.996s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/visualization
+[0.996s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/visualization/visualization.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/visualization
+[0.996s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/visualization/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/visualization
+[0.996s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/visualization/visualization_node.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/visualization
+[0.997s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/scripts
+[0.997s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/scripts/test_rviz_visualization.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/scripts
+[0.997s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/scripts/__init__.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/scripts
+[0.997s] copying /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build/lib/higgsr_ros/scripts/test_higgsr_system.py -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/scripts
+[0.997s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core/utils.py to utils.cpython-310.pyc
+[0.998s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core/__init__.py to __init__.cpython-310.pyc
+[0.998s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core/registration.py to registration.cpython-310.pyc
+[1.001s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/core/feature_extraction.py to feature_extraction.cpython-310.pyc
+[1.002s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes/lidar_client_node.py to lidar_client_node.cpython-310.pyc
+[1.002s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes/file_processor_node.py to file_processor_node.cpython-310.pyc
+[1.005s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes/file_processor_client_node.py to file_processor_client_node.cpython-310.pyc
+[1.006s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes/__init__.py to __init__.cpython-310.pyc
+[1.006s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/nodes/higgsr_server_node.py to higgsr_server_node.cpython-310.pyc
+[1.009s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/utils/ros_utils.py to ros_utils.cpython-310.pyc
+[1.009s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/utils/__init__.py to __init__.cpython-310.pyc
+[1.010s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/__init__.py to __init__.cpython-310.pyc
+[1.010s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/visualization/visualization.py to visualization.cpython-310.pyc
+[1.012s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/visualization/__init__.py to __init__.cpython-310.pyc
+[1.012s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/visualization/visualization_node.py to visualization_node.cpython-310.pyc
+[1.013s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/scripts/test_rviz_visualization.py to test_rviz_visualization.cpython-310.pyc
+[1.013s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/scripts/__init__.py to __init__.cpython-310.pyc
+[1.013s] byte-compiling /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros/scripts/test_higgsr_system.py to test_higgsr_system.cpython-310.pyc
+[1.014s] running install_data
+[1.014s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/ament_index/resource_index/packages
+[1.015s] copying resource/higgsr_ros -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/ament_index/resource_index/packages
+[1.015s] copying package.xml -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/higgsr_ros
+[1.015s] creating /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/higgsr_ros/config
+[1.015s] copying config/visualization_config.yaml -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/higgsr_ros/config
+[1.015s] copying config/higgsr_server_config.yaml -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/higgsr_ros/config
+[1.015s] copying config/file_processor_config.yaml -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/higgsr_ros/config
+[1.015s] copying config/lidar_client_config.yaml -> /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/share/higgsr_ros/config
+[1.015s] running install_egg_info
+[1.033s] Copying ../build/higgsr_ros/higgsr_ros.egg-info to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages/higgsr_ros-0.2.0-py3.10.egg-info
+[1.034s] running install_scripts
+[1.154s] Installing file_processor_client_node script to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/bin
+[1.155s] Installing file_processor_node script to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/bin
+[1.155s] Installing higgsr_server_node script to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/bin
+[1.155s] Installing higgsr_visualization_node script to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/bin
+[1.155s] Installing lidar_client_node script to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/bin
+[1.155s] Installing test_higgsr_system script to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/bin
+[1.155s] Installing test_rviz_visualization script to /home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/bin
+[1.156s] writing list of installed files to '/home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/install.log'
+[1.178s] Invoked command in '/home/user1/ROS2_Workspace/higgsros_ws/src/higgsr_ros' returned '0': PS1=(.venv) %m%# PYTHONPATH=/home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/user1/ROS2_Workspace/higgsros_ws/src/install/higgsr_ros/lib/python3.10/site-packages:${PYTHONPATH} VIRTUAL_ENV_PROMPT=(.venv) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/higgsr_ros build --build-base /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/build install --record /home/user1/ROS2_Workspace/higgsros_ws/src/build/higgsr_ros/install.log --single-version-externally-managed install_data

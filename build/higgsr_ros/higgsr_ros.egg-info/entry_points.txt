@@ -1,0 +1,8 @@
+[console_scripts]
+file_processor_client_node = higgsr_ros.nodes.file_processor_client_node:main
+file_processor_node = higgsr_ros.nodes.file_processor_node:main
+higgsr_server_node = higgsr_ros.nodes.higgsr_server_node:main
+higgsr_visualization_node = higgsr_ros.visualization.visualization_node:main
+lidar_client_node = higgsr_ros.nodes.lidar_client_node:main
+test_higgsr_system = higgsr_ros.scripts.test_higgsr_system:main
+test_rviz_visualization = higgsr_ros.scripts.test_rviz_visualization:main
