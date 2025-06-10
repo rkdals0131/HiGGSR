@@ -86,8 +86,11 @@ extract_high_density_keypoints = None
 apply_transform_to_keypoints_numba = None  
 hierarchical_adaptive_search = None
 
-# 초기화
-_update_function_references()
+# 초기화 - C++ 확장이 사용 가능하면 자동으로 활성화
+if CPP_EXTENSIONS_AVAILABLE:
+    set_use_cpp_extensions(True)
+else:
+    _update_function_references()
 
 # 시스템 정보 출력
 def print_acceleration_status() -> None:

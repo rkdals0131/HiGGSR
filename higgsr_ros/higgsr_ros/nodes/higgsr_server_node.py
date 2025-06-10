@@ -16,8 +16,9 @@ from visualization_msgs.msg import MarkerArray
 import tf_transformations
 
 from higgsr_ros.core import utils as core_utils
-from higgsr_ros.core import feature_extraction as core_feature_extraction
-from higgsr_ros.core import registration as core_registration
+from higgsr_ros.core.cpp_wrappers import feature_extraction_wrapper as core_feature_extraction
+from higgsr_ros.core.cpp_wrappers import registration_wrapper as core_registration
+from higgsr_ros.core import get_cpp_acceleration_status, set_use_cpp_extensions
 from higgsr_ros.utils import ros_utils
 
 
@@ -118,6 +119,9 @@ class HiGGSRServerNode(Node):
         # 결과 프레임 설정
         self.declare_parameter('global_frame_id', 'map')
         self.declare_parameter('scan_frame_id', 'base_link')
+        
+        # 🔥 C++/Python 백엔드 강제 선택 (간단한 enable/disable 옵션)
+        self.declare_parameter('force_python_backend', False)  # True면 Python 강제 사용
 
     def _declare_visualization_parameters(self):
         """시각화 관련 파라미터들을 선언 (file_processor_node와 동일)"""
@@ -168,7 +172,7 @@ class HiGGSRServerNode(Node):
         config['keypoint_density_threshold'] = self.get_parameter('keypoint_density_threshold').get_parameter_value().double_value
         
         num_processes_param = self.get_parameter('num_processes').get_parameter_value().integer_value
-        config['num_processes'] = num_processes_param if num_processes_param > 0 else None
+        config['num_processes'] = num_processes_param if num_processes_param > 0 else 0
         
         level_configs_str = self.get_parameter('level_configs').get_parameter_value().string_value
         config['level_configs'] = self._parse_level_configs(level_configs_str)
@@ -238,13 +242,26 @@ class HiGGSRServerNode(Node):
 
             self.get_logger().info(f"글로벌 Pillar Map 생성: {self.density_map_global.shape}")
 
-            # 2. 키포인트 추출
+            # 2. 키포인트 추출 (백엔드 강제 설정 적용)
+            # 🔥 파라미터에 따른 백엔드 강제 설정
+            force_python = self.get_parameter('force_python_backend').get_parameter_value().bool_value
+            if force_python:
+                set_use_cpp_extensions(False)  # Python 강제 사용
+                self.get_logger().info("🐍 Python 백엔드 강제 활성화")
+            else:
+                set_use_cpp_extensions(True)   # C++ 사용 시도
+                
+            backend_status = get_cpp_acceleration_status()
+            backend_name = "C++" if backend_status['cpp_enabled'] else "Python"
+            
+            start_time = time.time()
             self.global_keypoints = core_feature_extraction.extract_high_density_keypoints(
                 self.density_map_global, self.x_edges_global, self.y_edges_global, 
                 config['keypoint_density_threshold']
             )
+            feature_time = time.time() - start_time
 
-            self.get_logger().info(f"글로벌 키포인트 추출: {self.global_keypoints.shape[0]} 개")
+            self.get_logger().info(f"🔥 글로벌 키포인트 추출 [{backend_name}]: {self.global_keypoints.shape[0]} 개 ({feature_time:.4f}초)")
 
             if self.global_keypoints.shape[0] == 0:
                 self.get_logger().warn("추출된 글로벌 키포인트가 없습니다")
@@ -323,22 +340,28 @@ class HiGGSRServerNode(Node):
                 if density_map_scan.size == 0:
                     raise ValueError("캡처된 스캔 Pillar Map 생성 실패")
 
-                # 캡처된 스캔 키포인트 추출
+                # 캡처된 스캔 키포인트 추출  
+                backend_status = get_cpp_acceleration_status()
+                backend_name = "C++" if backend_status['cpp_enabled'] else "Python"
+                
+                start_time = time.time()
                 scan_keypoints = core_feature_extraction.extract_high_density_keypoints(
                     density_map_scan, x_edges_scan, y_edges_scan, config['keypoint_density_threshold']
                 )
+                feature_time = time.time() - start_time
                 
-                self.get_logger().info(f"키포인트 추출: {scan_keypoints.shape[0]} 개")
+                self.get_logger().info(f"🔥 스캔 키포인트 추출 [{backend_name}]: {scan_keypoints.shape[0]} 개 ({feature_time:.4f}초)")
 
                 if scan_keypoints.shape[0] == 0:
                     self.get_logger().warn("추출된 키포인트가 없습니다")
 
                 # 계층적 적응형 전역 정합 수행
-                self.get_logger().info("계층적 적응형 전역 정합 수행 중...")
+                self.get_logger().info(f"🚀 계층적 적응형 전역 정합 수행 중 [{backend_name}]...")
                 
-                initial_map_x_edges_for_search = [self.x_edges_global[0], self.x_edges_global[-1]]
-                initial_map_y_edges_for_search = [self.y_edges_global[0], self.y_edges_global[-1]]
+                initial_map_x_edges_for_search = np.array([self.x_edges_global[0], self.x_edges_global[-1]])
+                initial_map_y_edges_for_search = np.array([self.y_edges_global[0], self.y_edges_global[-1]])
                 
+                reg_start_time = time.time()
                 final_transform_dict, final_score, all_levels_visualization_data, total_hierarchical_time, total_calc_iterations = core_registration.hierarchical_adaptive_search(
                     self.global_keypoints, scan_keypoints,
                     initial_map_x_edges_for_search, initial_map_y_edges_for_search,
@@ -348,6 +371,7 @@ class HiGGSRServerNode(Node):
                     config['grid_size'],
                     num_processes=config['num_processes']
                 )
+                reg_time = time.time() - reg_start_time
                 
                 if final_transform_dict is None:
                     raise ValueError("정합 실패: 유효한 변환을 찾지 못함")
@@ -359,11 +383,11 @@ class HiGGSRServerNode(Node):
                 
                 total_time = time.time() - start_time
                 
-                self.get_logger().info("--- 정합 결과 ---")
+                self.get_logger().info(f"--- 정합 결과 [{backend_name}] ---")
                 self.get_logger().info(f"변환: tx={est_tx:.3f}, ty={est_ty:.3f}, theta={est_theta_deg:.2f}°")
                 self.get_logger().info(f"점수: {final_score}")
-                self.get_logger().info(f"처리 시간: {total_hierarchical_time:.2f}초, 총 시간: {total_time:.2f}초")
-                self.get_logger().info(f"계산된 변환 후보 수: {total_calc_iterations}")
+                self.get_logger().info(f"🚀 Registration 처리시간: {reg_time:.4f}초 (내부: {total_hierarchical_time:.4f}초)")
+                self.get_logger().info(f"💡 총 처리시간: {total_time:.4f}초, 계산 후보 수: {total_calc_iterations}")
                 
                 # 변환 행렬 생성
                 final_transform_matrix_4x4 = core_utils.create_transform_matrix_4x4(est_tx, est_ty, est_theta_deg)

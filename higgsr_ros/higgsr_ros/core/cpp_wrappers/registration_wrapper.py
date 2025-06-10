@@ -88,7 +88,7 @@ def _validate_hierarchical_search_inputs(
             raise TypeError(f"level_configs[{i}] must be dict")
         
         # 필수 키 확인
-        required_keys = ['grid_division', 'search_area_type', 'tx_ty_search_steps']
+        required_keys = ['grid_division', 'search_area_type', 'tx_ty_search_steps_per_cell']
         for key in required_keys:
             if key not in config:
                 raise AttributeError(f"level_configs[{i}] missing required key: {key}")
@@ -104,12 +104,12 @@ def _validate_hierarchical_search_inputs(
         if not isinstance(config['search_area_type'], str):
             raise TypeError(f"level_configs[{i}]['search_area_type'] must be string")
         
-        if not isinstance(config['tx_ty_search_steps'], (list, tuple)):
-            raise TypeError(f"level_configs[{i}]['tx_ty_search_steps'] must be list or tuple")
-        if len(config['tx_ty_search_steps']) != 2:
-            raise ValueError(f"level_configs[{i}]['tx_ty_search_steps'] must have 2 elements")
-        if not all(isinstance(x, int) and x > 0 for x in config['tx_ty_search_steps']):
-            raise ValueError(f"level_configs[{i}]['tx_ty_search_steps'] must contain positive integers")
+        if not isinstance(config['tx_ty_search_steps_per_cell'], (list, tuple)):
+            raise TypeError(f"level_configs[{i}]['tx_ty_search_steps_per_cell'] must be list or tuple")
+        if len(config['tx_ty_search_steps_per_cell']) != 2:
+            raise ValueError(f"level_configs[{i}]['tx_ty_search_steps_per_cell'] must have 2 elements")
+        if not all(isinstance(x, int) and x > 0 for x in config['tx_ty_search_steps_per_cell']):
+            raise ValueError(f"level_configs[{i}]['tx_ty_search_steps_per_cell'] must contain positive integers")
     
     # 경계값 정렬 확인
     if not np.all(np.diff(initial_map_x_edges) > 0):
@@ -246,9 +246,21 @@ def hierarchical_adaptive_search_cpp(
             
     except Exception as e:
         if use_cpp:
-            warnings.warn(f"C++ implementation failed, falling back to Python: {e}")
+            # 🚨 강력한 경고! 사용자가 C++을 기대했지만 Python으로 fallback됨
+            print("=" * 80)
+            print("🚨🚨🚨 CRITICAL WARNING: C++ FALLBACK TO PYTHON 🚨🚨🚨")
+            print("=" * 80)
+            print(f"❌ C++ hierarchical_adaptive_search FAILED!")
+            print(f"📝 Error: {e}")
+            print(f"🔄 FALLING BACK TO PYTHON IMPLEMENTATION")
+            print(f"⚠️  Performance will be SIGNIFICANTLY SLOWER!")
+            print(f"💡 User was expecting C++ but getting Python!")
+            print("=" * 80)
+            
+            # warnings도 함께 발생
+            warnings.warn(f"🚨 C++ FAILED, FALLBACK TO PYTHON: {e}", UserWarning, stacklevel=2)
     
-    # Python 구현으로 Fallback
+    # 🐍 Python 구현으로 Fallback (사용자가 속았을 수 있음!)
     try:
         result = hierarchical_adaptive_search_python(
             global_map_keypoints,
@@ -337,9 +349,18 @@ def count_correspondences_kdtree_cpp(
             
     except Exception as e:
         if use_cpp:
-            warnings.warn(f"C++ implementation failed, falling back to Python: {e}")
+            # 🚨 강력한 경고! 사용자가 C++을 기대했지만 Python으로 fallback됨
+            print("=" * 60)
+            print("🚨 CRITICAL WARNING: C++ FALLBACK TO PYTHON 🚨")
+            print("=" * 60)
+            print(f"❌ C++ count_correspondences_kdtree FAILED!")
+            print(f"📝 Error: {e}")
+            print(f"🔄 FALLING BACK TO PYTHON")
+            print("=" * 60)
+            
+            warnings.warn(f"🚨 C++ FAILED, FALLBACK TO PYTHON: {e}", UserWarning, stacklevel=2)
     
-    # Python 구현으로 Fallback
+    # 🐍 Python 구현으로 Fallback
     try:
         # Python 함수 호출시 KDTree 객체가 필요할 수 있음
         from scipy.spatial import KDTree

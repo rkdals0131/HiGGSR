@@ -29,14 +29,14 @@ std::vector<higgsr_core::LevelConfig> parseLevelConfigs(const py::list& level_co
             if (!config_dict.contains("search_area_type")) {
                 throw std::runtime_error("Missing required key 'search_area_type' in level config " + std::to_string(i));
             }
-            if (!config_dict.contains("tx_ty_search_steps")) {
-                throw std::runtime_error("Missing required key 'tx_ty_search_steps' in level config " + std::to_string(i));
+            if (!config_dict.contains("tx_ty_search_steps_per_cell")) {
+                throw std::runtime_error("Missing required key 'tx_ty_search_steps_per_cell' in level config " + std::to_string(i));
             }
             
             // 안전한 타입 캐스팅
             cfg.grid_division = config_dict["grid_division"].cast<std::vector<int>>();
             cfg.search_area_type = config_dict["search_area_type"].cast<std::string>();
-            cfg.tx_ty_search_steps = config_dict["tx_ty_search_steps"].cast<std::vector<int>>();
+            cfg.tx_ty_search_steps = config_dict["tx_ty_search_steps_per_cell"].cast<std::vector<int>>();
             
             // 선택적 키들
             if (config_dict.contains("correspondence_dist_thresh_factor")) {
