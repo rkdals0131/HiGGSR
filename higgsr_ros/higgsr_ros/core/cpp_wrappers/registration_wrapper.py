@@ -166,9 +166,9 @@ def hierarchical_adaptive_search_cpp(
     base_grid_cell_size: float = 1.0,
     num_processes: int = 0,
     use_cpp: bool = True
-) -> Dict[str, Union[float, int, bool]]:
+) -> Tuple:
     """
-    C++ 가속화된 계층적 적응 탐색 함수
+    C++ 가속화된 계층적 적응 탐색 함수 - 5개 원소 튜플 반환
     
     Args:
         global_map_keypoints: 글로벌 맵의 키포인트들 (N x 2)
@@ -183,13 +183,7 @@ def hierarchical_adaptive_search_cpp(
         use_cpp: C++ 구현 사용 여부
         
     Returns:
-        Dict: 최적 변환 결과
-            - tx: X 방향 이동
-            - ty: Y 방향 이동
-            - theta_deg: 회전 각도(도)
-            - score: 매칭 점수
-            - iterations: 수행된 반복 횟수
-            - success: 성공 여부
+        Tuple: (final_transform_dict, final_score, all_levels_viz_data, total_time_elapsed, total_calc_iterations)
             
     Raises:
         TypeError: 입력 타입이 올바르지 않은 경우
@@ -221,7 +215,8 @@ def hierarchical_adaptive_search_cpp(
             x_edges_double = initial_map_x_edges.astype(np.float64, copy=False)
             y_edges_double = initial_map_y_edges.astype(np.float64, copy=False)
             
-            result = higgsr_core_cpp.hierarchical_adaptive_search(
+            # C++ 함수는 이제 5개 원소 튜플을 직접 반환
+            result_tuple = higgsr_core_cpp.hierarchical_adaptive_search(
                 global_keypoints_double,
                 scan_keypoints_double,
                 x_edges_double,
@@ -233,16 +228,11 @@ def hierarchical_adaptive_search_cpp(
                 num_processes
             )
             
-            # 결과 변환
-            result_dict = _convert_result_to_dict(result)
+            # 튜플 검증 (5개 원소여야 함)
+            if not isinstance(result_tuple, tuple) or len(result_tuple) != 5:
+                raise RuntimeError(f"C++ function returned invalid tuple: expected 5 elements, got {len(result_tuple) if isinstance(result_tuple, tuple) else 'not a tuple'}")
             
-            # 결과 검증
-            required_keys = ['tx', 'ty', 'theta_deg', 'score', 'iterations', 'success']
-            for key in required_keys:
-                if key not in result_dict:
-                    raise RuntimeError(f"C++ function returned incomplete result: missing {key}")
-            
-            return result_dict
+            return result_tuple
             
     except Exception as e:
         if use_cpp:
@@ -274,14 +264,7 @@ def hierarchical_adaptive_search_cpp(
             num_processes
         )
         
-        # Python 결과를 dict 형태로 변환 (필요시)
-        if not isinstance(result, dict):
-            # Python 함수가 튜플이나 다른 형태로 반환하는 경우 처리
-            if hasattr(result, '_asdict'):  # namedtuple인 경우
-                result = result._asdict()
-            else:
-                raise RuntimeError("Python function returned unexpected result type")
-        
+        # Python 함수는 이미 튜플을 반환하므로 그대로 반환
         return result
         
     except Exception as e:
@@ -387,14 +370,25 @@ def hierarchical_adaptive_search(
     min_candidate_separation_factor: float = 2.0,
     base_grid_cell_size: float = 1.0,
     num_processes: int = 0
-) -> Dict[str, Union[float, int, bool]]:
-    """기존 함수명 호환성을 위한 래퍼"""
-    return hierarchical_adaptive_search_cpp(
-        global_map_keypoints, live_scan_keypoints,
-        initial_map_x_edges, initial_map_y_edges, level_configs,
-        num_candidates_to_select_per_level, min_candidate_separation_factor,
-        base_grid_cell_size, num_processes, use_cpp=True
-    )
+) -> Tuple:
+    """기존 함수명 호환성을 위한 래퍼 - C++ 또는 Python의 결과를 직접 반환"""
+    try:
+        # C++ 구현이 튜플을 직접 반환하므로, 그대로 반환합니다.
+        return hierarchical_adaptive_search_cpp(
+            global_map_keypoints, live_scan_keypoints,
+            initial_map_x_edges, initial_map_y_edges, level_configs,
+            num_candidates_to_select_per_level, min_candidate_separation_factor,
+            base_grid_cell_size, num_processes, use_cpp=True
+        )
+    except Exception as e:
+        # C++가 실패하면 Python으로 직접 fallback
+        print(f"C++ wrapper failed, using Python directly: {e}")
+        return hierarchical_adaptive_search_python(
+            global_map_keypoints, live_scan_keypoints,
+            initial_map_x_edges, initial_map_y_edges, level_configs,
+            num_candidates_to_select_per_level, min_candidate_separation_factor,
+            base_grid_cell_size, num_processes
+        )
 
 
 def count_correspondences_kdtree(

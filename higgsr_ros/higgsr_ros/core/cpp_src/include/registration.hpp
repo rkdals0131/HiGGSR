@@ -22,15 +22,17 @@ struct TransformResult {
     double score;        // 매칭 점수
     int iterations;      // 수행된 반복 횟수
     bool success;        // 성공 여부
+    double execution_time_ms; // 실행 시간 (밀리초)
     
     TransformResult() 
         : tx(0.0), ty(0.0), theta_deg(0.0), score(-1.0), 
-          iterations(0), success(false) {}
+          iterations(0), success(false), execution_time_ms(0.0) {}
           
     TransformResult(double tx_val, double ty_val, double theta_deg_val, 
-                   double score_val, int iter_val = 0)
+                   double score_val, int iter_val = 0, double exec_time_ms = 0.0)
         : tx(tx_val), ty(ty_val), theta_deg(theta_deg_val), 
-          score(score_val), iterations(iter_val), success(score_val >= 0.0) {}
+          score(score_val), iterations(iter_val), success(score_val >= 0.0), 
+          execution_time_ms(exec_time_ms) {}
           
     // 결과 유효성 검증
     bool isValid() const {

@@ -192,9 +192,9 @@ py::array_t<double> applyTransformToKeypointsPython(
 }
 
 /**
- * @brief 계층적 적응 탐색을 위한 Python 래퍼 함수
+ * @brief 계층적 적응 탐색을 위한 Python 래퍼 함수 - 5개 원소 튜플 반환
  */
-py::dict hierarchicalAdaptiveSearchPython(
+py::tuple hierarchicalAdaptiveSearchPython(
     const py::array_t<double>& global_map_keypoints,
     const py::array_t<double>& live_scan_keypoints,
     const py::array_t<double>& initial_map_x_edges,
@@ -241,16 +241,24 @@ py::dict hierarchicalAdaptiveSearchPython(
             x_edges_vec, y_edges_vec, params
         );
         
-        // Python dict로 결과 반환
+        // Python dict 생성 (첫 번째 반환값)
         py::dict result_dict;
         result_dict["tx"] = result.tx;
         result_dict["ty"] = result.ty;
         result_dict["theta_deg"] = result.theta_deg;
         result_dict["score"] = result.score;
-        result_dict["iterations"] = result.iterations;
-        result_dict["success"] = result.success;
         
-        return result_dict;
+        // 시각화 데이터는 C++에서 생성하지 않으므로 빈 리스트로 반환
+        py::list viz_data;
+        
+        // 🐍 5개 원소를 가진 튜플을 생성하여 반환
+        return py::make_tuple(
+            result_dict,                                    // 최종 변환 결과 dict
+            result.score,                                   // 최종 점수
+            viz_data,                                       // 시각화 데이터 (빈 리스트)
+            result.execution_time_ms / 1000.0,              // 실행 시간 (초)
+            result.iterations                               // 총 반복 횟수
+        );
         
     } catch (const std::exception& e) {
         throw py::value_error("Hierarchical search error: " + std::string(e.what()));
@@ -272,13 +280,14 @@ PYBIND11_MODULE(higgsr_core_cpp, m) {
     
     py::class_<higgsr_core::TransformResult>(m, "TransformResult")
         .def(py::init<>())
-        .def(py::init<double, double, double, double, int>())
+        .def(py::init<double, double, double, double, int, double>())
         .def_readwrite("tx", &higgsr_core::TransformResult::tx)
         .def_readwrite("ty", &higgsr_core::TransformResult::ty)
         .def_readwrite("theta_deg", &higgsr_core::TransformResult::theta_deg)
         .def_readwrite("score", &higgsr_core::TransformResult::score)
         .def_readwrite("iterations", &higgsr_core::TransformResult::iterations)
         .def_readwrite("success", &higgsr_core::TransformResult::success)
+        .def_readwrite("execution_time_ms", &higgsr_core::TransformResult::execution_time_ms)
         .def("isValid", &higgsr_core::TransformResult::isValid);
     
     // Feature extraction 함수들

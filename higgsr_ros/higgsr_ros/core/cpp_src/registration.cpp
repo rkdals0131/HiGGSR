@@ -383,13 +383,14 @@ TransformResult hierarchicalAdaptiveSearch(
         
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        best_result.execution_time_ms = duration.count(); // 실행 시간 저장
         
         std::cout << "🚀 REAL C++ hierarchical search completed!" << std::endl;
         std::cout << "🚀 Best transform: tx=" << best_tx << ", ty=" << best_ty 
                   << ", theta=" << best_theta << "°" << std::endl;
         std::cout << "🚀 Best score: " << best_score << std::endl;
         std::cout << "🚀 Total iterations: " << total_iterations << std::endl;
-        std::cout << "🚀 C++ execution time: " << duration.count() << " ms" << std::endl;
+        std::cout << "🚀 C++ execution time: " << best_result.execution_time_ms << " ms" << std::endl;
         
     } catch (const std::exception& e) {
         throw std::runtime_error("Error during hierarchical search: " + std::string(e.what()));
