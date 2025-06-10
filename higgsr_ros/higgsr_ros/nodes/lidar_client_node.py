@@ -13,6 +13,7 @@ from geometry_msgs.msg import TransformStamped, PoseStamped
 from nav_msgs.msg import Odometry
 from tf2_ros import TransformBroadcaster
 import tf_transformations
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
 from higgsr_interface.srv import RegisterScan
 from higgsr_interface.msg import PointCloudInfo
@@ -50,12 +51,20 @@ class LidarClientNode(Node):
 
         # 라이다 토픽 구독
         lidar_topic = self.get_parameter('lidar_topic').get_parameter_value().string_value
+        
+        # QoS 프로파일 설정 (Best Effort)
+        qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1  # Best Effort는 보통 depth 1을 사용
+        )
+        
         self.lidar_subscription = self.create_subscription(
             PointCloud2,
             lidar_topic,
             self.lidar_callback,
-            10)
-        self.get_logger().info(f"라이다 토픽 구독: {lidar_topic}")
+            qos_profile) # QoS 프로파일 적용
+        self.get_logger().info(f"라이다 토픽 구독: {lidar_topic} (QoS: Best Effort)")
 
         # 서비스 클라이언트 생성
         self.register_scan_client = self.create_client(RegisterScan, 'register_scan')
