@@ -1,0 +1,95 @@
+higgsr_server_node:
+  ros__parameters:
+    # Global map configuration
+    global_map:
+      file_path: "src/HiGGSR/Data/around_singong - Cloud.ply"
+      grid_size: 0.2
+      min_points_for_density: 3
+      density_metric: "std"              # Options: "std", "range"
+      keypoint_density_threshold: 0.1
+      frame_id: "map"
+    
+    # Live scan processing
+    live_scan:
+      grid_size: 0.2
+      min_points_for_density: 3
+      density_metric: "std"
+      keypoint_density_threshold: 0.1
+    
+    # Hierarchical search algorithm
+    algorithm:
+      num_candidates_per_level: 3
+      min_candidate_separation_factor: 1.5
+      num_processes: 0                   # 0 = auto, -1 = all cores
+      
+      # Level configurations
+      levels:
+        - level: 1
+          grid: [6, 6]
+          search_area: "full_map"
+          theta_range: [0, 359]
+          theta_steps: 48
+          correspondence_threshold_factor: 7.0
+          tx_ty_steps: [10, 10]
+          
+        - level: 2
+          grid: [7, 7]
+          search_area: "relative_to_map"
+          area_ratio: 0.4
+          theta_range: [0, 359]
+          theta_steps: 48
+          correspondence_threshold_factor: 5.0
+          tx_ty_steps: [10, 10]
+          
+        - level: 3
+          grid: [4, 4]
+          search_area: "absolute_size"
+          area_size: [40.0, 40.0]
+          theta_range: [0, 359]
+          theta_steps: 48
+          correspondence_threshold_factor: 2.5
+          tx_ty_steps: [10, 10]
+    
+    # Visualization (Python scripts)
+    visualization:
+      enable_matplotlib: true
+      enable_2d_keypoints: true
+      enable_3d_result: true
+      enable_super_grid_heatmap: true
+
+lidar_client_node:
+  ros__parameters:
+    # LiDAR input configuration
+    lidar_topic: "/ouster/points"
+    scan_capture_mode: "manual"          # Options: "manual", "timer"
+    scan_capture_interval: 5.0           # seconds (for timer mode)
+    
+    # Registration service
+    register_scan_service: "/register_scan"
+    timeout_sec: 10.0
+    
+    # Output configuration
+    publish_tf: true
+    tf_parent_frame: "map"
+    tf_child_frame: "base_link"
+    
+    # Filtering
+    max_range: 50.0                      # meters
+    min_points: 1000
+
+visualization_node:
+  ros__parameters:
+    # Marker configuration
+    markers:
+      global_map_color: [0.0, 1.0, 0.0, 0.3]    # RGBA
+      live_scan_color: [1.0, 0.0, 0.0, 0.5]
+      keypoint_size: 0.3
+      path_line_width: 0.05
+      
+    # Update rates
+    path_publish_rate: 10.0              # Hz
+    marker_lifetime: 0.0                 # 0 = permanent
+    
+    # Topics
+    pose_topic: "/higgsr_pose"
+    transform_topic: "/higgsr_transform"
